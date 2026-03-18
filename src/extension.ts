@@ -638,8 +638,17 @@ class CommitMessageGenerator {
                 outputChannel.appendLine(`\n[PROMPT] Creating prompt for ${fileType}...`);
             }
             
-            // Build prompt with hardcoded conventional format
-            const prompt = `Generate a git commit message for the following changes. 
+            // Build prompt with configurable rules
+            const defaultRules = [
+                'Use conventional commit format',
+                'Keep under 72 characters for the first line',
+                'Be specific and clear',
+                'Common types: feat, fix, docs, style, refactor, test, chore'
+            ];
+            const rules = this.config.get<string[]>('commitRules', defaultRules);
+            const rulesBlock = rules.map((r: string) => '- ' + r).join('\n');
+
+            const prompt = `Generate a git commit message for the following changes.
 
 IMPORTANT: Return ONLY the commit message text itself. Do not include:
 - Any explanatory text like "Based on...", "Here's...", or "Here is..."
@@ -653,10 +662,7 @@ Git diff:
 ${diff}
 
 Rules:
-- Use conventional commit format
-- Keep under 72 characters for the first line
-- Be specific and clear
-- Common types: feat, fix, docs, style, refactor, test, chore
+${rulesBlock}
 
 Remember: Return ONLY the commit message text, nothing else.`;
 
