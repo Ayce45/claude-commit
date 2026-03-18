@@ -818,32 +818,43 @@ export function activate(context: vscode.ExtensionContext) {
                 outputChannel.appendLine('\n[GENERATE] Starting...');
             }
             
-            // Generate commit message
-            const commitMessage = await vscode.window.withProgress({
-                location: vscode.ProgressLocation.Notification,
-                title: "Generating commit message with Claude CLI...",
-                cancellable: true
-            }, async (_progress, token) => {
-                token.onCancellationRequested(() => {
-                    if (debugMode) {
-                        outputChannel.appendLine('[GENERATE] Cancelled by user');
-                    }
-                });
-                
-                return await generator.generateCommitMessage(targetRepo.rootUri.fsPath);
-            });
+            // Save current input state and show pending state
+            const previousValue = targetRepo.inputBox.value;
+            targetRepo.inputBox.value = '';
+            targetRepo.inputBox.placeholder = 'Generating commit message with Claude...';
+            targetRepo.inputBox.enabled = false;
 
-            if (commitMessage) {
-                if (debugMode) {
-                    outputChannel.appendLine(`\n[SUCCESS] Setting commit message: ${commitMessage}`);
+            try {
+                // Generate commit message
+                const commitMessage = await vscode.window.withProgress({
+                    location: vscode.ProgressLocation.SourceControl,
+                    title: "Generating commit message with Claude CLI...",
+                    cancellable: true
+                }, async (_progress: any, token: any) => {
+                    token.onCancellationRequested(() => {
+                        if (debugMode) {
+                            outputChannel.appendLine('[GENERATE] Cancelled by user');
+                        }
+                    });
+
+                    return await generator.generateCommitMessage(targetRepo.rootUri.fsPath);
+                });
+
+                if (commitMessage) {
+                    if (debugMode) {
+                        outputChannel.appendLine(`\n[SUCCESS] Setting commit message: ${commitMessage}`);
+                    }
+
+                    targetRepo.inputBox.value = commitMessage;
+                } else {
+                    if (debugMode) {
+                        outputChannel.appendLine('[ERROR] No commit message generated');
+                    }
+                    targetRepo.inputBox.value = previousValue;
                 }
-                
-                targetRepo.inputBox.value = commitMessage;
-                vscode.window.showInformationMessage(`Commit message generated!`);
-            } else {
-                if (debugMode) {
-                    outputChannel.appendLine('[ERROR] No commit message generated');
-                }
+            } finally {
+                targetRepo.inputBox.enabled = true;
+                targetRepo.inputBox.placeholder = '';
             }
 
         } catch (error: any) {
