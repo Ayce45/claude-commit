@@ -19,11 +19,11 @@ jobs:
           node-version: 22
           cache: npm
 
-      - run: npm ci || npm ci
+      - run: npm ci
 
       - run: npm run compile
 
-      - run: npm run package
+      - run: npx @vscode/vsce package
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
