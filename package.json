@@ -77,7 +77,9 @@
         },
         "claude-commit.commitRules": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "default": [
             "Use conventional commit format",
             "Keep under 72 characters for the first line",
@@ -106,6 +108,7 @@
     "@typescript-eslint/parser": "^8.39.0",
     "@vscode/test-cli": "^0.0.11",
     "@vscode/test-electron": "^2.5.2",
+    "@vscode/vsce": "^3.7.1",
     "eslint": "^9.32.0",
     "typescript": "^5.9.2"
   }
