@@ -46,10 +46,9 @@ That's it. No configuration, no setup wizards, no complexity.
 
 ## Extension Settings
 
-This extension keeps it simple with just two optional settings:
-
 * `claude-commit.claudePath`: Custom path to Claude CLI executable (auto-detects by default)
 * `claude-commit.debugMode`: Enable debug output for troubleshooting
+* `claude-commit.commitRules`: Custom rules for commit message generation (array of strings)
 
 ## Configuration Examples
 
@@ -64,6 +63,18 @@ This extension keeps it simple with just two optional settings:
 ```json
 {
     "claude-commit.debugMode": true
+}
+```
+
+### Custom commit rules
+```json
+{
+    "claude-commit.commitRules": [
+        "Write in French",
+        "Use imperative mood, start with a lowercase verb",
+        "Keep under 50 characters",
+        "Types: add, fix, update, remove, refactor, format, chore"
+    ]
 }
 ```
 
@@ -108,6 +119,10 @@ If the extension can't find Claude CLI:
 - Code is only sent to Claude's servers through your authenticated CLI session
 
 ## Release Notes
+
+### 1.1.0
+- Added `commitRules` setting to customize commit message generation rules
+- Default rules remain unchanged for backward compatibility
 
 ### 1.0.1
 - Streamlined configuration – removed unnecessary options for dead-simple operation
