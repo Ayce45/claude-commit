@@ -2,7 +2,7 @@
   "name": "claude-commit",
   "displayName": "Claude Commit",
   "description": "Generate smart commit messages with Claude CLI",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "publisher": "juanlb",
   "author": {
     "name": "JLB"
@@ -93,6 +93,7 @@
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
+    "package": "npx @vscode/vsce package",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src",
     "test": "vscode-test"
