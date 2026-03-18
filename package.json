@@ -2,7 +2,7 @@
   "name": "claude-commit",
   "displayName": "Claude Commit",
   "description": "Generate smart commit messages with Claude CLI",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "publisher": "juanlb",
   "author": {
     "name": "JLB"
@@ -74,6 +74,17 @@
           "type": "boolean",
           "default": false,
           "description": "Enable debug mode to show CLI commands being executed"
+        },
+        "claude-commit.commitRules": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [
+            "Use conventional commit format",
+            "Keep under 72 characters for the first line",
+            "Be specific and clear",
+            "Common types: feat, fix, docs, style, refactor, test, chore"
+          ],
+          "description": "Custom rules for commit message generation. Each item is a rule line."
         }
       }
     }
